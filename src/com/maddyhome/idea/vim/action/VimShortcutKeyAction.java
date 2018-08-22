@@ -54,36 +54,27 @@ import static java.awt.event.KeyEvent.*;
 
 /**
  * Handles Vim keys that are treated as action shortcuts by the IDE.
- *
+ * <p>
  * These keys are not passed to {@link com.maddyhome.idea.vim.VimTypedActionHandler} and should be handled by actions.
  */
 public class VimShortcutKeyAction extends AnAction implements DumbAware {
   private static final String ACTION_ID = "VimShortcutKeyAction";
 
-  @NotNull public static final Set<KeyStroke> VIM_ONLY_EDITOR_KEYS = ImmutableSet.<KeyStroke>builder()
-    .addAll(getKeyStrokes(VK_ENTER, 0))
-    .addAll(getKeyStrokes(VK_ESCAPE, 0))
-    .addAll(getKeyStrokes(VK_TAB, 0))
-    .addAll(getKeyStrokes(VK_BACK_SPACE, 0, CTRL_MASK))
-    .addAll(getKeyStrokes(VK_INSERT, 0))
-    .addAll(getKeyStrokes(VK_DELETE, 0, CTRL_MASK))
-    .addAll(getKeyStrokes(VK_UP, 0, CTRL_MASK, SHIFT_MASK))
-    .addAll(getKeyStrokes(VK_DOWN, 0, CTRL_MASK, SHIFT_MASK))
-    .addAll(getKeyStrokes(VK_LEFT, 0, CTRL_MASK, SHIFT_MASK, CTRL_MASK | SHIFT_MASK))
-    .addAll(getKeyStrokes(VK_RIGHT, 0, CTRL_MASK, SHIFT_MASK, CTRL_MASK | SHIFT_MASK))
-    .addAll(getKeyStrokes(VK_HOME, 0, CTRL_MASK, SHIFT_MASK, CTRL_MASK | SHIFT_MASK))
-    .addAll(getKeyStrokes(VK_END, 0, CTRL_MASK, SHIFT_MASK, CTRL_MASK | SHIFT_MASK))
-    .addAll(getKeyStrokes(VK_PAGE_UP, 0, SHIFT_MASK, CTRL_MASK | SHIFT_MASK))
-    .addAll(getKeyStrokes(VK_PAGE_DOWN, 0, SHIFT_MASK, CTRL_MASK | SHIFT_MASK))
-    .build();
+  @NotNull public static final Set<KeyStroke> VIM_ONLY_EDITOR_KEYS =
+    ImmutableSet.<KeyStroke>builder().addAll(getKeyStrokes(VK_ENTER, 0)).addAll(getKeyStrokes(VK_ESCAPE, 0))
+      .addAll(getKeyStrokes(VK_TAB, 0)).addAll(getKeyStrokes(VK_BACK_SPACE, 0, CTRL_MASK))
+      .addAll(getKeyStrokes(VK_INSERT, 0)).addAll(getKeyStrokes(VK_DELETE, 0, CTRL_MASK))
+      .addAll(getKeyStrokes(VK_UP, 0, CTRL_MASK, SHIFT_MASK)).addAll(getKeyStrokes(VK_DOWN, 0, CTRL_MASK, SHIFT_MASK))
+      .addAll(getKeyStrokes(VK_LEFT, 0, CTRL_MASK, SHIFT_MASK, CTRL_MASK | SHIFT_MASK))
+      .addAll(getKeyStrokes(VK_RIGHT, 0, CTRL_MASK, SHIFT_MASK, CTRL_MASK | SHIFT_MASK))
+      .addAll(getKeyStrokes(VK_HOME, 0, CTRL_MASK, SHIFT_MASK, CTRL_MASK | SHIFT_MASK))
+      .addAll(getKeyStrokes(VK_END, 0, CTRL_MASK, SHIFT_MASK, CTRL_MASK | SHIFT_MASK))
+      .addAll(getKeyStrokes(VK_PAGE_UP, 0, SHIFT_MASK, CTRL_MASK | SHIFT_MASK))
+      .addAll(getKeyStrokes(VK_PAGE_DOWN, 0, SHIFT_MASK, CTRL_MASK | SHIFT_MASK)).build();
 
-  @NotNull private static final Set<KeyStroke> NON_FILE_EDITOR_KEYS = ImmutableSet.<KeyStroke>builder()
-    .addAll(getKeyStrokes(VK_ENTER, 0))
-    .addAll(getKeyStrokes(VK_ESCAPE, 0))
-    .addAll(getKeyStrokes(VK_TAB, 0))
-    .addAll(getKeyStrokes(VK_UP, 0))
-    .addAll(getKeyStrokes(VK_DOWN, 0))
-    .build();
+  @NotNull private static final Set<KeyStroke> NON_FILE_EDITOR_KEYS =
+    ImmutableSet.<KeyStroke>builder().addAll(getKeyStrokes(VK_ENTER, 0)).addAll(getKeyStrokes(VK_ESCAPE, 0))
+      .addAll(getKeyStrokes(VK_TAB, 0)).addAll(getKeyStrokes(VK_UP, 0)).addAll(getKeyStrokes(VK_DOWN, 0)).build();
 
   private static final Logger ourLogger = Logger.getInstance(VimShortcutKeyAction.class.getName());
   private static AnAction ourInstance = null;
@@ -123,11 +114,10 @@ public class VimShortcutKeyAction extends AnAction implements DumbAware {
 
   private void notifyAboutShortcutConflict(@NotNull final KeyStroke keyStroke) {
     VimPlugin.getKey().getSavedShortcutConflicts().put(keyStroke, ShortcutOwner.VIM);
-    final String message = String.format(
-      "Using the <b>%s</b> shortcut for Vim emulation.<br/>" +
-      "You can redefine it as an <a href='#ide'>IDE shortcut</a> or " +
-      "configure its handler in <a href='#settings'>Vim Emulation</a> settings.",
-      KeymapUtil.getShortcutText(new KeyboardShortcut(keyStroke, null)));
+    final String message = String.format("Using the <b>%s</b> shortcut for Vim emulation.<br/>" +
+                                         "You can redefine it as an <a href='#ide'>IDE shortcut</a> or " +
+                                         "configure its handler in <a href='#settings'>Vim Emulation</a> settings.",
+                                         KeymapUtil.getShortcutText(new KeyboardShortcut(keyStroke, null)));
     final NotificationListener listener = new NotificationListener.Adapter() {
       @Override
       protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent e) {
@@ -141,11 +131,9 @@ public class VimShortcutKeyAction extends AnAction implements DumbAware {
         }
       }
     };
-    final Notification notification = new Notification(VimPlugin.IDEAVIM_NOTIFICATION_ID,
-                                                       VimPlugin.IDEAVIM_NOTIFICATION_TITLE,
-                                                       message,
-                                                       NotificationType.INFORMATION,
-                                                       listener);
+    final Notification notification =
+      new Notification(VimPlugin.IDEAVIM_NOTIFICATION_ID, VimPlugin.IDEAVIM_NOTIFICATION_TITLE, message,
+                       NotificationType.INFORMATION, listener);
     notification.notify(null);
   }
 
@@ -218,7 +206,16 @@ public class VimShortcutKeyAction extends AnAction implements DumbAware {
     final InputEvent inputEvent = e.getInputEvent();
     if (inputEvent instanceof KeyEvent) {
       final KeyEvent keyEvent = (KeyEvent)inputEvent;
-      return KeyStroke.getKeyStrokeForEvent(keyEvent);
+      if (keyEvent.getKeyCode() == keyEvent.getExtendedKeyCode()) {
+        return KeyStroke.getKeyStrokeForEvent(keyEvent);
+      }
+      else {
+        int id = keyEvent.getID();
+        boolean isReleased = keyEvent.getID() == KeyEvent.KEY_RELEASED;
+        if (id == KeyEvent.KEY_PRESSED || isReleased) {
+          return KeyStroke.getKeyStroke(keyEvent.getExtendedKeyCode(), keyEvent.getModifiers(), isReleased);
+        }
+      }
     }
     return null;
   }
